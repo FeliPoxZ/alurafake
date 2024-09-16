@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import static br.com.alura.AluraFake.user.Role.STUDENT;
+import static br.com.alura.AluraFake.user.Role.INSTRUCTOR;
 
 public class NewStudentUserDTO {
 
@@ -46,7 +47,8 @@ public class NewStudentUserDTO {
     }
 
     public User toModel() {
-        return new User(name, email, STUDENT, password);
+        //TESTE APENAS
+        return new User(name, email, INSTRUCTOR , password);
     }
 
 }
