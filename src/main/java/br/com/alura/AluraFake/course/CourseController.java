@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
 
     @PostMapping("/course/new")
-    public ResponseEntity createCourse(@Valid @RequestBody NewCourseDTO newCourse) {
+    public ResponseEntity<Object> createCourse(@Valid @RequestBody NewCourseDTO newCourse) {
         // Questão 1 aqui
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/course/{code}/inactive")
-    public ResponseEntity createCourse(@PathVariable("code") String courseCode) {
+    public ResponseEntity<Object> createCourse(@PathVariable("code") String courseCode) {
         // Questão 2 aqui
         return ResponseEntity.ok().build();
     }

@@ -15,7 +15,7 @@ import java.util.List;
 public class RegistrationController {
 
     @PostMapping("/registration/new")
-    public ResponseEntity createCourse(@Valid @RequestBody NewRegistrationDTO newRegistration) {
+    public ResponseEntity<Object> createCourse(@Valid @RequestBody NewRegistrationDTO newRegistration) {
         //Questão 3 aqui
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
