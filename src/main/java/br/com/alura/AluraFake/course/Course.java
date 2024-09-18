@@ -66,6 +66,14 @@ public class Course {
         return dateInactivation;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setDateInactivation(LocalDateTime dateInactivation) {
+        this.dateInactivation = dateInactivation;
+    }
+
     
 
 

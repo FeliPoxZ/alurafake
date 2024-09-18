@@ -2,6 +2,8 @@ package br.com.alura.AluraFake.course;
 
 import jakarta.validation.Valid;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,6 @@ public class CourseController {
    
     @PostMapping("/course/new")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody NewCourseDTO newCourse) {
-        System.out.println("Essa porra desse krl =" + newCourse.getEmailInstrutor());
         String userEmail = newCourse.getEmailInstrutor();
         User instructor = userRepository.findByEmail(userEmail);
 
@@ -56,7 +57,15 @@ public class CourseController {
     @PostMapping("/course/{code}/inactive")
     public ResponseEntity<Object> createCourse(@PathVariable("code") String courseCode) {
         // Questão 2 aqui
-        return ResponseEntity.ok().build();
+        Course choseCourse = courseRepository.findCourseByCode(courseCode);
+        if (choseCourse == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }else{
+            choseCourse.setDateInactivation(LocalDateTime.now());
+            choseCourse.setStatus(Status.INACTIVE);
+            courseRepository.save(choseCourse);
+            return ResponseEntity.ok().build();
+        }
     }
 
 }
