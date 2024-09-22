@@ -1,4 +1,4 @@
-CREATE TABLE Course (
+CREATE TABLE Course(
     code varchar(50) NOT NULL,
     name varchar(100) NOT NULL,
     emailInstrutor varchar(50) NOT NULL,

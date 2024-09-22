@@ -8,6 +8,7 @@ public class NewRegistrationDTO {
     @NotBlank
     @NotNull
     private String courseCode;
+
     @NotBlank
     @NotNull
     @Email
