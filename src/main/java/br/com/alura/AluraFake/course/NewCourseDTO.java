@@ -15,7 +15,7 @@ public class NewCourseDTO {
     //code
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z-]+$", message = "O código do curso deve ser textual, sem espaços, nem caracteres numéricos e nem caracteres especiais, mas pode ser separado por hífen (-)")
+    @Pattern(regexp = "^[a-zA-Z-]+$")
     private String code;
 
     @NotNull

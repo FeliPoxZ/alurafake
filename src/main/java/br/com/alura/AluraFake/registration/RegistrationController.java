@@ -27,59 +27,41 @@ public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 
+
+
     @PostMapping("/registration/new")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody NewRegistrationDTO newRegistration) {
         if (registrationService.getUserByEmail(newRegistration.getStudentEmail()) ==  null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorItemDTO("email", "Email não cadastrado no  sistema"));
+                .body(new ErrorItemDTO("studentEmail", "Email não cadastrado no  sistema"));
         }
         User student =  registrationService.getUserByEmail(newRegistration.getStudentEmail());
         if (registrationService.getCourseByCode(newRegistration.getCourseCode()) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorItemDTO("code", "Curso não encontrado"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorItemDTO("courseCode", "Curso não encontrado"));
         }
         Course ChosenCourse = registrationService.getCourseByCode(newRegistration.getCourseCode());
         if (registrationService.validationCourse(ChosenCourse)){
             Registration newEnrollment = new Registration(ChosenCourse, student);
-            registrationRepository.save(newEnrollment);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            try {
+                System.err.println("entrou no try catch");
+                registrationRepository.save(newEnrollment);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } catch (Exception e) {
+                String errorMessage = e.getMessage();
+                if (errorMessage.contains("UC_UserCourse")) {                    System.err.println("entro no if do catchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorItemDTO("email", "O usuário já esta matriculado"));
+                }
+            }
+            
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorItemDTO("code", "Curso invalido"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorItemDTO("code", "Curso desativado"));
     }
 
     @GetMapping("/registration/report")
     public ResponseEntity<List<RegistrationReportItem>> report() {
         List<RegistrationReportItem> items = new ArrayList<>();
-
-        //Questão 4 aqui
-
-        //Dados fakes que devem ser rescrevidos
-        items.add(new RegistrationReportItem(
-                "Java para iniciantes",
-                "java",
-                "Caio Bugorin",
-                "caio.bugorin@alura.com.br",
-                10L
-                )
-        );
-
-        items.add(new RegistrationReportItem(
-                        "Spring para iniciantes",
-                        "spring",
-                        "Caio Bugorin",
-                        "caio.bugorin@alura.com.br",
-                        9L
-                )
-        );
-
-        items.add(new RegistrationReportItem(
-                        "Maven para avançados",
-                        "mavem",
-                        "Caio Bugorin",
-                        "caio.bugorin@alura.com.br",
-                        9L
-                )
-        );
-
+        items = registrationRepository.findCoursesWithTotalRegistrations();
         return ResponseEntity.ok(items);
     }
 

@@ -1,11 +1,21 @@
 package br.com.alura.AluraFake.registration;
 
+
+
 public class RegistrationReportItem {
     private final String courseName;
     private final String courseCode;
     private final String instructorName;
     private final String instructorEmail;
     private final Long totalRegistrations;
+
+    public  RegistrationReportItem(String courseCode, Long totalRegistrations){
+        this.courseName = "";
+        this.instructorEmail = "";
+        this.instructorName = "";
+        this.courseCode = courseCode;
+        this.totalRegistrations = totalRegistrations;
+    }
 
     public RegistrationReportItem(String courseName, String courseCode, String instructorName, String instructorEmail, Long totalRegistrations) {
         this.courseName = courseName;

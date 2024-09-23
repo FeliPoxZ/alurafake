@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.alura.AluraFake.user.Role;
 import br.com.alura.AluraFake.user.User;
 import br.com.alura.AluraFake.user.UserRepository;
+import br.com.alura.AluraFake.util.ErrorItemDTO;
 
 
 
@@ -41,14 +42,16 @@ public class CourseController {
         User instructor = userRepository.findByEmail(userEmail);
 
         if (instructor == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorItemDTO("emailInstrutor", "Usuario não encontrado"));
         }else{
             if (instructor.getRole() == Role.INSTRUCTOR){
                 Course course = newCourse.toModel();
                 courseRepository.save(course);
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             }else{
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User don't have permission to create a course");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorItemDTO("emailInstrutor", "Usuario nao tem permissão  para criar curso"));
             }
         }
 
@@ -59,7 +62,8 @@ public class CourseController {
         // Questão 2 aqui
         Course choseCourse = courseRepository.findCourseByCode(courseCode);
         if (choseCourse == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorItemDTO("code", "curso não encotrado"));
         }else{
             choseCourse.setDateInactivation(LocalDateTime.now());
             choseCourse.setStatus(Status.INACTIVE);
